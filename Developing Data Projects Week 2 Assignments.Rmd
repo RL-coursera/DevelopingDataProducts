@@ -2,7 +2,9 @@
 title: "Developing Data Projects Week 2 Assignment RL"
 author: "R Levine"
 date: "12/23/2019"
+output: github_document
 ---
+
 
 ## Instructions
 Create a web page using R Markdown that features a map created with Leaflet.
