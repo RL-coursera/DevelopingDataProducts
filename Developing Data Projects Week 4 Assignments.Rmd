@@ -1,0 +1,79 @@
+---
+title: "Developing Data Products Week 4 Assignment"
+author: "Robert Levine"
+date: "12/29/2019"
+output:
+  slidy_presentation: default
+  ioslides_presentation:
+    smaller: yes
+    widescreen: yes
+subtitle: Use the spacebar or arrow keys to navigate slides
+---
+
+## Coursera Reproducible Pitch
+
+- URL: *https://github.com/manastiwari/Developing-Data-Products-Week-4-Course-Project*
+- First, create a Shiny application and deploy it on Rstudio's servers.Second, you will use Slidify or Rstudio Presenter to prepare a reproducible pitch presentation about your application.
+- Details are in this link:
+
+URL: *https://www.coursera.org/learn/data-products/peer/tMYrn/course-project-shiny-application-and-reproducible-pitch*
+
+The data was extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973-74 models).
+
+## Overview
+
+The shiny app plots different variables from the mtcars dataset provided with R against miles per gallon (mpg).
+
+```{r }
+head(mtcars)
+```
+
+## UI Code
+
+```{r echo=TRUE, warning=FALSE, message=FALSE, eval=FALSE}
+library(shiny)
+shinyUI(fluidPage(
+  
+  # Application title
+  titlePanel("Cars Dataset - Miles per Gallon"),
+  
+  sidebarPanel(
+    
+    selectInput("variable", "Variable:", 
+                c("Cylinders" = "cyl",
+                  "Transmission" = "am",
+                  "Gears" = "gear"))
+  ),
+  
+  mainPanel(
+    # Output: Formatted text for caption ----
+    h3(textOutput("caption")),
+    
+    # Output: Plot of the requested variable against mpg ----
+    plotOutput("mpgPlot")
+  )
+))
+```
+
+## Server Code
+
+```{r echo=TRUE, warning=FALSE, message=FALSE, eval=FALSE}
+library(shiny)
+library(plotly)
+mpgData <- mtcars
+mpgData$am <- factor(mpgData$am, labels = c("Automatic", "Manual"))
+shinyServer(function(input, output) {
+  
+  formulaText <- reactive({
+    paste("mpg vs ", input$variable)
+  })
+  
+  output$caption <- renderText({
+    formulaText()
+  })
+  output$mpgPlot <- renderPlot({
+    ggplot(mpgData, aes_string(y=input$variable, x="mpg")) + geom_point()
+  })
+  
+})
+```
