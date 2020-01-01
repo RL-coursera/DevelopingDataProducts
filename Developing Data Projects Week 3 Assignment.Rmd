@@ -1,0 +1,42 @@
+---
+title: "Developing Data Products Week 3 Assignment"
+subtitle: "Use the spacebar or arrow keys to navigate slides"
+author: "Robert Levine"
+date: "12/23/2019"
+output: 
+  ioslides_presentation:
+    widescreen: true
+    smaller: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r echo=FALSE, warning=FALSE, message=FALSE }
+install.packages("plotly",repos = "http://cran.us.r-project.org")
+install.packages("gapminder",repos = "http://cran.us.r-project.org")
+library(ggplot2)
+library(plotly)
+library(gapminder)
+```
+
+## Understanding Gas Mileage
+
+Using the `mtcars` dataset we aim to understand the relationship
+between various factors and gas mileage (`mpg`).
+
+We plot weight (`wt`) vs. mileage (`mpg`)  along the x/y axes. We 
+visualize the number of cylinders (`cyl`) as colors and the amount of
+horsepower (`hp`) as the size of an individual point in the plot.
+
+## Visualizing the Data
+
+```{r plot, echo=FALSE, warning=FALSE, message=FALSE}
+suppressMessages(library(plotly))
+plot_ly(data = mtcars, x = ~wt, y = ~mpg, 
+        color = ~as.factor(cyl), size = ~hp,
+        text = ~paste("Weight: ", wt, '<br>MPG:', mpg),
+        type = "scatter", mode = "markers") %>%
+  layout(title = "Car Data")
+```
